@@ -15,12 +15,6 @@ export default function Home() {
   const [RenderedComponent, setRenderedComponent] = useState<React.ComponentType | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [componentKey, setComponentKey] = useState(0);
-  const codeRef = useRef(code);
-
-  // Keep ref in sync with code
-  useEffect(() => {
-    codeRef.current = code;
-  }, [code]);
 
   // Run code and render component
   const runCode = useCallback((codeToRun: string) => {
@@ -45,35 +39,42 @@ export default function Home() {
     setComponentKey((k) => k + 1);
   }, []);
 
-  // Handle run button - run and save
-  const handleRun = useCallback(() => {
-    runCode(codeRef.current);
-    save();
-  }, [save, runCode]);
-
   // Reset to default template
   const handleReset = useCallback(() => {
     reset();
   }, [reset]);
 
-  // Run on initial load
+  // Auto-run on code change with debounce
+  const debounceRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    if (!isLoaded) return;
+
+    // Clear previous timeout
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+    }
+
+    // Debounce the run to avoid running on every keystroke
+    debounceRef.current = setTimeout(() => {
+      runCode(code);
+      save();
+    }, 300);
+
+    return () => {
+      if (debounceRef.current) {
+        clearTimeout(debounceRef.current);
+      }
+    };
+  }, [code, isLoaded, runCode, save]);
+
+  // Run immediately on component switch
   useEffect(() => {
     if (isLoaded) {
       runCode(code);
     }
-    // Only run on initial load, not on every code change
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoaded, selected]);
-
-  // Re-run after reset (when code changes back to template)
-  const prevCode = useRef(code);
-  useEffect(() => {
-    // Detect reset: code changed and matches a template pattern (has import statement at start)
-    if (prevCode.current !== code && code.startsWith("import {")) {
-      runCode(code);
-    }
-    prevCode.current = code;
-  }, [code, runCode]);
+  }, [selected]);
 
   return (
     <div className="h-dvh flex flex-col bg-background">
@@ -86,7 +87,7 @@ export default function Home() {
 
         <div className="flex-1 flex flex-col min-h-0 md:w-1/2">
           <Editor value={code} onChange={setCode} />
-          <ActionBar onReset={handleReset} onRun={handleRun} />
+          <ActionBar onReset={handleReset} />
         </div>
       </div>
     </div>

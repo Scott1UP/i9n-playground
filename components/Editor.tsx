@@ -21,18 +21,18 @@ export function Editor({ value, onChange }: EditorProps) {
 
   if (!mounted) {
     return (
-      <div className="flex-1 bg-muted animate-pulse" />
+      <div className="flex-1 bg-surface" />
     );
   }
 
   return (
-    <div className="flex-1 overflow-hidden flex flex-col">
+    <div className="flex-1 overflow-hidden flex flex-col bg-surface">
       <CodeMirror
         value={value}
         onChange={onChange}
         extensions={[javascript({ jsx: true, typescript: true })]}
         theme={resolvedTheme === "dark" ? githubDark : githubLight}
-        className="flex-1 overflow-auto text-sm"
+        className="flex-1 overflow-auto"
         basicSetup={{
           lineNumbers: true,
           highlightActiveLineGutter: true,
@@ -55,7 +55,6 @@ export function Editor({ value, onChange }: EditorProps) {
         }}
         style={{
           height: "100%",
-          fontSize: "14px",
         }}
       />
     </div>

@@ -44,8 +44,39 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        {/* Tailwind CDN config - must be before CDN script */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.tailwind = {
+                config: {
+                  darkMode: 'class',
+                  theme: {
+                    extend: {
+                      colors: {
+                        border: 'var(--border)',
+                        'border-subtle': 'var(--border-subtle)',
+                        background: 'var(--background)',
+                        foreground: 'var(--foreground)',
+                        muted: 'var(--muted)',
+                        'muted-foreground': 'var(--muted-foreground)',
+                        accent: 'var(--accent)',
+                        'accent-hover': 'var(--accent-hover)',
+                        'accent-subtle': 'var(--accent-subtle)',
+                        surface: 'var(--surface)',
+                        'surface-raised': 'var(--surface-raised)',
+                        error: 'var(--error)',
+                        success: 'var(--success)',
+                      }
+                    }
+                  }
+                }
+              }
+            `,
+          }}
+        />
         {/* Tailwind Play CDN for dynamic class support in the playground */}
-        <script src="https://cdn.tailwindcss.com" async />
+        <script src="https://cdn.tailwindcss.com" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}

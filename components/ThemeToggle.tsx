@@ -2,6 +2,7 @@
 
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
+import { Sun, Moon, Monitor } from "lucide-react";
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme();
@@ -13,7 +14,7 @@ export function ThemeToggle() {
 
   if (!mounted) {
     return (
-      <button className="w-9 h-9 rounded-lg bg-zinc-100 dark:bg-zinc-800" />
+      <button className="w-9 h-9 rounded-md bg-muted/50" />
     );
   }
 
@@ -23,18 +24,17 @@ export function ThemeToggle() {
     else setTheme("system");
   };
 
+  const Icon = theme === "light" ? Sun : theme === "dark" ? Moon : Monitor;
+
   return (
     <button
       onClick={cycleTheme}
-      className="w-9 h-9 rounded-lg bg-zinc-100 dark:bg-zinc-800
-                 flex items-center justify-center
-                 hover:bg-zinc-200 dark:hover:bg-zinc-700
-                 transition-colors text-lg"
+      className="w-9 h-9 rounded-md flex items-center justify-center
+                 text-muted-foreground hover:text-foreground hover:bg-muted
+                 transition-colors duration-150"
       title={`Theme: ${theme}`}
     >
-      {theme === "light" && "☀️"}
-      {theme === "dark" && "🌙"}
-      {theme === "system" && "◐"}
+      <Icon size={18} strokeWidth={1.5} />
     </button>
   );
 }
