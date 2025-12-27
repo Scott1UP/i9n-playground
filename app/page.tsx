@@ -8,6 +8,16 @@ import { ActionBar } from "@/components/ActionBar";
 import { useComponentCode } from "@/hooks/useComponentCode";
 import { transpileCode } from "@/lib/transpile";
 import { executeCode } from "@/lib/execute";
+import { clearCode } from "@/lib/storage";
+
+// One-time fix: clear cached Toggle Group template that had incorrect API
+if (typeof window !== "undefined") {
+  const migrationKey = "i9n_migration_v1";
+  if (!localStorage.getItem(migrationKey)) {
+    clearCode("Toggle Group");
+    localStorage.setItem(migrationKey, "done");
+  }
+}
 
 export default function Home() {
   const [selected, setSelected] = useState<ComponentName>("Button");

@@ -81,7 +81,7 @@ export function TailwindDictionary({ open, onOpenChange }: TailwindDictionaryPro
             <div className="flex items-center gap-3 px-3.5 h-10 rounded-lg border border-border bg-surface
                         focus-within:ring-2 focus-within:ring-accent/20 focus-within:border-accent
                         transition-all duration-150">
-              <Search size={16} className="shrink-0 text-muted-foreground" />
+            <Search size={16} className="shrink-0 text-muted-foreground" />
               <input
                 type="text"
                 placeholder="Search properties or categories..."
@@ -142,7 +142,7 @@ function CategorySection({ category, expanded, onToggle, searchTerm }: CategoryS
           <ChevronDown
             size={14}
             strokeWidth={1.5}
-            className="transition-transform duration-200"
+            className="shrink-0 transition-transform duration-200"
             style={{ transform: expanded ? "rotate(0deg)" : "rotate(-90deg)" }}
           />
         </span>

@@ -5,7 +5,21 @@ import { Book, ChevronDown } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
 import { TailwindDictionary } from "./TailwindDictionary";
 
-const COMPONENTS = ["Button", "Checkbox", "Dropdown"] as const;
+const COMPONENTS = [
+  "Button",
+  "Checkbox",
+  "Collapsible",
+  "Dialog",
+  "Dropdown",
+  "Input",
+  "Progress",
+  "Slider",
+  "Switch",
+  "Tabs",
+  "Toast",
+  "Toggle Group",
+  "Tooltip",
+] as const;
 export type ComponentName = (typeof COMPONENTS)[number];
 
 interface HeaderProps {
@@ -30,8 +44,8 @@ export function Header({ selected, onSelect }: HeaderProps) {
         {/* Divider */}
         <div className="hidden md:block w-px h-5 bg-border" />
 
-        {/* Mobile: dropdown */}
-        <div className="md:hidden relative">
+        {/* Component selector dropdown */}
+        <div className="relative inline-flex items-center">
           <select
             value={selected}
             onChange={(e) => onSelect(e.target.value as ComponentName)}
@@ -45,29 +59,10 @@ export function Header({ selected, onSelect }: HeaderProps) {
               </option>
             ))}
           </select>
-          <ChevronDown size={14} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
+          <div className="absolute right-0 h-full flex items-center justify-center w-8 pointer-events-none">
+            <ChevronDown size={14} className="text-muted-foreground" />
+          </div>
         </div>
-
-        {/* Desktop: tabs */}
-        <nav className="hidden md:flex items-center gap-1 p-1 rounded-lg bg-muted/50">
-          {COMPONENTS.map((name) => (
-            <button
-              key={name}
-              onClick={() => onSelect(name)}
-              className={`relative px-3.5 py-1.5 rounded-md text-sm font-medium transition-all duration-150
-                ${
-                  selected === name
-                    ? "bg-surface text-foreground shadow-sm"
-                    : "text-muted-foreground hover:text-foreground hover:bg-surface/50"
-                }`}
-            >
-              {name}
-              {selected === name && (
-                <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-accent rounded-full" />
-              )}
-            </button>
-          ))}
-        </nav>
       </div>
 
       <div className="flex items-center gap-1.5">
